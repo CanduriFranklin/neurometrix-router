@@ -1,0 +1,34 @@
+﻿# Build artifacts
+build/
+out/
+cmake-build-*/
+_deps/
+
+# IDE
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+
+# Compiled
+*.exe
+*.dll
+*.so
+*.dylib
+*.obj
+*.lib
+*.pdb
+
+# Logs
+*.log
+
+# Environment
+*.env
+.env.*
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
