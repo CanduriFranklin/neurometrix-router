@@ -1,0 +1,9 @@
+﻿build/
+out/
+.vs/
+.idea/
+.git/
+.github/
+*.md
+docs/
+tests/

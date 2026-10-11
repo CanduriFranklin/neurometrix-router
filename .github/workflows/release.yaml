@@ -1,0 +1,20 @@
+﻿name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and push image with Podman
+        run: |
+          podman build -t registry.neurometrix.io/router:${{ github.ref_name }} .
+          podman push registry.neurometrix.io/router:${{ github.ref_name }}
+
+      - name: Sign image with Cosign
+        run: cosign sign --yes registry.neurometrix.io/router:${{ github.ref_name }}

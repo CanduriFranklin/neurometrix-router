@@ -1,0 +1,56 @@
+﻿name: CI
+
+on:
+  push:
+    branches: [ main-developers ]
+  pull_request:
+    branches: [ main-developers ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-24.04
+    container:
+      image: rocm/dev-ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y cmake g++-14 ninja-build libssl-dev libpq-dev protobuf-compiler
+          update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100
+          update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100
+
+      - name: Configure
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Unit tests
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Static analysis
+        run: clang-tidy $(find domain application infrastructure -name '*.cpp') || true
+
+  security-scan:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Trivy filesystem scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          severity: HIGH,CRITICAL
+
+      - name: Build image with Podman
+        run: |
+          sudo apt-get install -y podman
+          podman build -t neurometrix-router:${{ github.sha }} .
+
+      - name: Scan image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: neurometrix-router:${{ github.sha }}
+          severity: HIGH,CRITICAL

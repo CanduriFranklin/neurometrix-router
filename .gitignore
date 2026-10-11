@@ -1,4 +1,4 @@
-﻿# Build artifacts
+﻿# Build
 build/
 out/
 cmake-build-*/
@@ -6,8 +6,8 @@ _deps/
 
 # IDE
 .vs/
-.idea/
 .vscode/
+.idea/
 *.user
 *.suo
 
@@ -16,19 +16,23 @@ _deps/
 *.dll
 *.so
 *.dylib
+*.o
 *.obj
+*.a
 *.lib
 *.pdb
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+*.crt
+!*.example
 
 # Logs
 *.log
 
-# Environment
-*.env
-.env.*
-
-# CMake
-CMakeCache.txt
-CMakeFiles/
-cmake_install.cmake
-compile_commands.json
+# OS
+.DS_Store
+Thumbs.db
