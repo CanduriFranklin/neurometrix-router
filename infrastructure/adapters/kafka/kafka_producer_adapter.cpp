@@ -1,4 +1,4 @@
-﻿// ============================================================================
+// ============================================================================
 // KafkaProducerAdapter - Implementation
 // ============================================================================
 // See kafka_producer_adapter.hpp for the contract.
@@ -226,16 +226,30 @@ KafkaProducerAdapter::publish_routing_decision(
         // NOTE: this is a temporary binary format. It will be replaced by
         // Protobuf serialization once the .proto contracts are generated.
         // The port and the use case remain unaffected.
+        // Binary wire format (Little-Endian):
+        //   [8]  message_id
+        //   [8]  timestamp_utc (Unix ms)
+        //   [4]  study_uid length
+        //   [N]  study_uid (UTF-8)
+        //   [4]  dicom_path length
+        //   [M]  dicom_path (UTF-8)
         std::string payload;
         {
-            std::uint64_t mid = event.message_id();
-            std::uint64_t ts  = event.occurred_at_utc();
+            const std::uint64_t mid = event.message_id();
+            const std::uint64_t ts  = event.occurred_at_utc();
             const auto& uid   = event.study_uid().value();
+            const auto& path  = event.dicom_path();
 
-            payload.reserve(16 + uid.size());
-            payload.append(reinterpret_cast<const char*>(&mid), sizeof(mid));
-            payload.append(reinterpret_cast<const char*>(&ts),  sizeof(ts));
+            const std::uint32_t uid_len  = static_cast<std::uint32_t>(uid.size());
+            const std::uint32_t path_len = static_cast<std::uint32_t>(path.size());
+
+            payload.reserve(8 + 8 + 4 + uid_len + 4 + path_len);
+            payload.append(reinterpret_cast<const char*>(&mid),      sizeof(mid));
+            payload.append(reinterpret_cast<const char*>(&ts),       sizeof(ts));
+            payload.append(reinterpret_cast<const char*>(&uid_len),  sizeof(uid_len));
             payload.append(uid);
+            payload.append(reinterpret_cast<const char*>(&path_len), sizeof(path_len));
+            payload.append(path);
         }
 
         // ---- Step 3: key the message by message_id -------------------------

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 // ============================================================================
 // Routing Events - Domain Layer
@@ -37,12 +37,14 @@ public:
         StudyUid study_uid,
         Dimensionality dimensionality,
         std::string target_topic_suffix,
+        std::string dicom_path,
         std::uint64_t occurred_at_utc
     ) noexcept
         : message_id_(message_id),
           study_uid_(std::move(study_uid)),
           dimensionality_(dimensionality),
           target_topic_suffix_(std::move(target_topic_suffix)),
+          dicom_path_(std::move(dicom_path)),
           occurred_at_utc_(occurred_at_utc)
     {}
 
@@ -51,6 +53,9 @@ public:
     [[nodiscard]] Dimensionality dimensionality() const noexcept { return dimensionality_; }
     [[nodiscard]] const std::string& target_topic_suffix() const noexcept {
         return target_topic_suffix_;
+    }
+    [[nodiscard]] const std::string& dicom_path() const noexcept {
+        return dicom_path_;
     }
     [[nodiscard]] std::uint64_t occurred_at_utc() const noexcept { return occurred_at_utc_; }
 
@@ -64,6 +69,7 @@ private:
     StudyUid        study_uid_;
     Dimensionality  dimensionality_;
     std::string     target_topic_suffix_;   // "2d", "3d", or "4d"
+    std::string     dicom_path_;            // source path or object-store URI
     std::uint64_t   occurred_at_utc_;       // Unix milliseconds
 };
 
