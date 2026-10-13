@@ -1,4 +1,4 @@
-﻿# Neurometrix Router
+# Neurometrix Router
 
 Intelligent routing microservice for MRI dimensionality detection (2D / 3D / 4D).
 

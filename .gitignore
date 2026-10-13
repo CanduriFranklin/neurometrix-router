@@ -36,3 +36,9 @@ _deps/
 # OS
 .DS_Store
 Thumbs.db
+
+# Build directories
+build2/
+*.log
+router.log
+router.err.log
