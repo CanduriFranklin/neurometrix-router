@@ -42,3 +42,15 @@ build2/
 *.log
 router.log
 router.err.log
+
+# Environment variables
+.env
+.env.local
+*.env
+
+
+# Virtual Environments
+venv/
+__pycache__/
+*.pyc
+
