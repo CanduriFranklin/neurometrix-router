@@ -1,24 +1,15 @@
-﻿# Security Policy - Router Microservice
+﻿# SECURITY & PRIVACY POLICY
 
-## Reporting a Vulnerability
+## 1. Zero PII Leakage (HIPAA/GDPR Compliance)
+Neurometrix is designed with privacy-by-design. 
+* **Data Lake (Local):** DICOM images are processed locally by the C++ core. 
+* **LLM API:** Only anonymized mathematical metrics (CBF, HU, etc.) are sent to the Google Gemma API. **No patient images or identifiable metadata are ever transmitted to external LLM providers.**
 
-Report suspected vulnerabilities privately to security@neurometrix.local.
-Do not open public issues for security problems.
+## 2. Human-in-the-Loop (HITL) Safety
+AI hallucinations in medicine can be fatal. Neurometrix enforces a strict HITL protocol:
+* The AI cannot finalize a report.
+* A licensed physician must review and digitally sign (Approve/Reject) every case in the UI.
+* All decisions are logged in the \medical_reviews\ PostgreSQL table for legal auditability.
 
-## Non-Negotiable Security Rules
-
-1. All Kafka and PostgreSQL connections MUST use mTLS.
-2. All SQL queries MUST use parameterized statements. String concatenation is forbidden.
-3. No secrets in code, configuration files, or environment templates.
-4. All external inputs (DICOM tags, protobuf payloads) MUST be validated before use.
-5. Container images MUST run as non-root user.
-6. Dependencies MUST be scanned with Trivy before deployment.
-7. SBOM MUST be generated on every release.
-
-## SQL Injection Protection
-
-The router uses parameterized queries exclusively. Example:
-
-    $1 = SELECT * FROM studies WHERE study_uid = $1
-
-String concatenation of SQL is prohibited and enforced by static analysis.
+## 3. Responsible Disclosure
+If you discover a security vulnerability, please contact the author directly. Do not open public issues regarding security flaws.

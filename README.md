@@ -1,36 +1,23 @@
-# Neurometrix Router
 
-Intelligent routing microservice for MRI dimensionality detection (2D / 3D / 4D).
+<div align="center">
+  <img src="logo.png" alt="Neurometrix Logo" width="300"/>
+  
+  # NEUROMETRIX
+  
+  **ADVANCED MATHEMATICAL NEUROIMAGING SYSTEM**  
+  *QUANTITATIVE STRUCTURAL MEASUREMENT & AGENTIAL INFERENCE ENGINE*
+  
+  <br/>
+  <img src="hackathon.png" alt="AMD Developer Hackathon ACT III" width="600"/>
+</div>
 
-## Responsibilities
+---
 
-1. Consume DICOM studies from the API Gateway.
-2. Read metadata to detect dimensionality (2D, 3D, or 4D).
-3. Publish RoutingRequest messages to the appropriate Kafka topic.
-4. Never process images itself. Never talk to other cores directly.
 
-## Architecture
+## Project Overview
+A high-throughput microservice that receives DICOM metadata and dynamically routes the study to the correct mathematical core (2D, 3D, or 4D).
 
-- Hexagonal Architecture (Ports and Adapters)
-- Domain-Driven Design
-- Event-driven via Apache Kafka
-- C++23
-
-## Non-Negotiable Rules
-
-1. No code, files, or logic shared with other microservices.
-2. Communication exclusively through Kafka.
-3. Independent deployment, independent failure domain.
-
-## Build
-
-    cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
-    cmake --build build --parallel
-
-## Test
-
-    ctest --test-dir build --output-on-failure
-
-## Run
-
-    ./build/router
+## DevSecOps & Architecture
+- Hexagonal Architecture: Designed for 100% testability.
+- Security: Implements TLS/SSL and SASL for Kafka communication.
+- Observability: Exposes Prometheus metrics on port 9090.

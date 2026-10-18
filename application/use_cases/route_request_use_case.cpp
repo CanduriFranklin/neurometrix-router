@@ -10,7 +10,6 @@
 #include <chrono>
 #include <string>
 #include <utility>
-#include <vector>
 
 namespace neurometrix::router::application {
 
@@ -144,7 +143,6 @@ RouteRequestUseCase::execute(const RouteRequestInput& input) noexcept {
         study.study_uid,
         dimensionality,
         suffix,
-        input.dicom_path,
         now
     };
 
